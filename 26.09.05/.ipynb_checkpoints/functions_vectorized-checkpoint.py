@@ -1,87 +1,40 @@
 import numpy as np
+from decor import functime
 
-
+@functime
 def prod_non_zero_diag(x):
-    """Compute product of nonzero elements from matrix diagonal.
+    diag = x.diagonal()
+    return np.prod(diag[diag != 0])
 
-    input:
-    x -- 2-d numpy array
-    output:
-    product -- integer number
-
-
-    Vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def are_multisets_equal(x, y):
-    """Return True if both vectors create equal multisets.
+    return np.array_equal(np.sort(x), np.sort(y))
 
-    input:
-    x, y -- 1-d numpy arrays
-    output:
-    True if multisets are equal, False otherwise -- boolean
-
-    Vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def max_after_zero(x):
-    """Find max element after zero in array.
+    mask = (x[:-1] == 0)
+    return x[1:][mask].max()
 
-    input:
-    x -- 1-d numpy array
-    output:
-    maximum element after zero -- integer number
-
-    Vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def convert_image(img, coefs):
-    """Sum up image channels with weights from coefs array
+    return np.dot(img, coefs)
 
-    input:
-    img -- 3-d numpy array (H x W x 3)
-    coefs -- 1-d numpy array (length 3)
-    output:
-    img -- 2-d numpy array
-
-    Vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def run_length_encoding(x):
-    """Make run-length encoding.
+    if x.size == 0:
+        return np.array([]), np.array([])
+        
+    change_indices = np.nonzero(x[1:] != x[:-1])[0] + 1
+    run_starts = np.r_[0, change_indices]
+    run_ends = np.r_[change_indices, x.size]
+    
+    elements = x[run_starts]
+    counters = run_ends - run_starts
+    
+    return elements, counters
 
-    input:
-    x -- 1-d numpy array
-    output:
-    elements, counters -- integer iterables
-
-    Vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def pairwise_distance(x, y):
-    """Return pairwise object distance.
-
-    input:
-    x, y -- 2d numpy arrays
-    output:
-    distance array -- 2d numpy array
-
-    Vctorized implementation.
-    """
-
-    pass
+    diff = x[:, np.newaxis, :] - y[np.newaxis, :, :]
+    return np.sqrt(np.sum(diff ** 2, axis=-1))
+    

@@ -1,84 +1,80 @@
+from decor import functime
+
+@functime
 def prod_non_zero_diag(x):
-    """Compute product of nonzero elements from matrix diagonal.
+    prod = 1
+    for i in range(min(len(x), len(x[0]))):
+        prod *= x[i][i] if x[i][i] != 0 else 1
 
-    input:
-    x -- 2-d numpy array
-    output:
-    product -- integer number
+    return prod
 
-
-    Not vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def are_multisets_equal(x, y):
-    """Return True if both vectors create equal multisets.
+    if len(x) != len(y):
+        return False
+        
+    sorted_x = sorted(x)
+    sorted_y = sorted(y)
 
-    input:
-    x, y -- 1-d numpy arrays
-    output:
-    True if multisets are equal, False otherwise -- boolean
+    for i, j in zip(sorted_x, sorted_y):
+        if i != j:
+            return False
 
-    Not vectorized implementation.
-    """
+    return True
 
-    pass
-
-
+@functime
 def max_after_zero(x):
-    """Find max element after zero in array.
+    max_element = float('-inf')
+    for i in range(len(x)):
+        if x[i] == 0 and i+1 < len(x):
+            if x[i+1] > max_element:
+                max_element = x[i+1]
 
-    input:
-    x -- 1-d numpy array
-    output:
-    maximum element after zero -- integer number
+    return max_element
 
-    Not vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def convert_image(img, coefs):
-    """Sum up image channels with weights from coefs array
+    height = len(img)
+    width = len(img[0])
+    num_channels = len(coefs)
+    
+    result = [[0.0 for _ in range(width)] for _ in range(height)]
+    
+    for i in range(height):
+        for j in range(width):
+            val = 0.0
+            for k in range(num_channels):
+                val += img[i][j][k] * coefs[k]
+            result[i][j] = val
+            
+    return result
 
-    input:
-    img -- 3-d numpy array (H x W x 3)
-    coefs -- 1-d numpy array (length 3)
-    output:
-    img -- 2-d numpy array
-
-    Not vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def run_length_encoding(x):
-    """Make run-length encoding.
+    if len(x) == 0:
+        return [], []
+        
+    elements = [x[0]]
+    counters = [1]
+    
+    for i in range(1, len(x)):
+        if x[i] == x[i-1]:
+            counters[-1] += 1
+        else:
+            elements.append(x[i])
+            counters.append(1)
+            
+    return elements, counters
 
-    input:
-    x -- 1-d numpy array
-    output:
-    elements, counters -- integer iterables
-
-    Not vectorized implementation.
-    """
-
-    pass
-
-
+@functime
 def pairwise_distance(x, y):
-    """Return pairwise object distance.
-
-    input:
-    x, y -- 2d numpy arrays
-    output:
-    distance array -- 2d numpy array
-
-    Not vectorized implementation.
-    """
-
-    pass
+    distances = [[0.0 for _ in range(len(y))] for _ in range(len(x))]
+    
+    for i in range(len(x)):
+        for j in range(len(y)):
+            dist = 0.0
+            for k in range(len(x[i])):
+                dist += (x[i][k] - y[j][k]) ** 2
+            distances[i][j] = dist ** 0.5
+            
+    return distances
