@@ -7,5 +7,5 @@ def functime(func):
         end = time.perf_counter()
 
         print(f'TIME: {(end - start):.5f}')
-        return res
+        return res, (end - start)
     return wraper
